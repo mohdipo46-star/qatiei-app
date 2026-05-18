@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>🐑 قطيعي - إدارة الأغنام</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f4f0;
+            max-width: 500px;
+            margin: 0 auto;
+            padding-bottom: 30px;
+        }
+
+        /* header */
+        .header {
+            background: linear-gradient(135deg, #1b5e3a, #2e7d32);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 0 0 25px 25px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        /* stats */
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 15px;
+        }
+
+        .stat-card {
+            background: white;
+            flex: 1;
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .stat-card .number {
+            font-size: 28px;
+            font-weight: bold;
+            color: #2e7d32;
+        }
+
+        .stat-card .label {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        /* form */
+        .form-container {
+            background: white;
+            margin: 15px;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .form-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #1b5e3a;
+            border-right: 4px solid #2e7d32;
+            padding-right: 10px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            font-size: 14px;
+            background: #f9f9f9;
+        }
+
+        .row-2 {
+            display: flex;
+            gap: 10px;
+        }
+
+        .row-2 .input-group {
+            flex: 1;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #2e7d32;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:active {
+            background: #1b5e3a;
+        }
+
+        /* animals list */
+        .animals-section {
+            margin: 15px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            margin-bottom: 12px;
+            color: #1b5e3a;
+            border-right: 4px solid #2e7d32;
+            padding-right: 10px;
+        }
+
+        .animal-card {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+        }
+
+        .animal-info h3 {
+            font-size: 16px;
+            color: #1b5e3a;
+        }
+
+        .animal-info p {
+            font-size: 12px;
+            color: #777;
+            margin-top: 4px;
+        }
+
+        .delete-btn {
+            background: #e53935;
+            padding: 8px 15px;
+            border-radius: 10px;
+            width: auto;
+            margin-top: 0;
+            font-size: 12px;
+        }
+
+        .delete-btn:active {
+            background: #c62828;
+        }
+
+        .empty-msg {
+            text-align: center;
+            color: #999;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>🐑 قطيعي</h1>
+    <p>إدارة وتتبع الأغنام</p>
+</div>
+
+<div class="stats">
+    <div class="stat-card">
+        <div class="number" id="totalCount">0</div>
+        <div class="label">إجمالي الرؤوس</div>
+    </div>
+    <div class="stat-card">
+        <div class="number" id="avgWeight">0</div>
+        <div class="label">متوسط الوزن</div>
+    </div>
+</div>
+
+<div class="form-container">
+    <div class="form-title">➕ إضافة رأس جديد</div>
+    
+    <div class="input-group">
+        <label>🏷️ رقم التعريف / الاسم</label>
+        <input type="text" id="animalName" placeholder="مثال: نعجة رقم 1">
+    </div>
+
+    <div class="row-2">
+        <div class="input-group">
+            <label>🐏 السلالة</label>
+            <select id="breed">
+                <option>نعيمي</option>
+                <option>نجدي</option>
+                <option>حري</option>
+                <option>سواكني</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label>⚖️ الوزن (كجم)</label>
+            <input type="number" id="weight" placeholder="مثال: 45">
+        </div>
+    </div>
+
+    <button id="saveBtn">💾 حفظ البيانات</button>
+</div>
+
+<div class="animals-section">
+    <div class="section-title">📋 قائمة القطيع</div>
+    <div id="animalsList"></div>
+</div>
+
+<script>
+    // تحميل البيانات المحفوظة
+    let animals = JSON.parse(localStorage.getItem('qatiei_animals')) || [];
+
+    function updateStats() {
+        document.getElementById('totalCount').innerText = animals.length;
+        
+        let totalWeight = 0;
+        animals.forEach(a => {
+            let w = parseInt(a.weight);
+            if(!isNaN(w)) totalWeight += w;
+        });
+        let avg = animals.length > 0 ? Math.round(totalWeight / animals.length) : 0;
+        document.getElementById('avgWeight').innerText = avg;
+    }
+
+    function renderAnimals() {
+        const container = document.getElementById('animalsList');
+        if(animals.length === 0) {
+            container.innerHTML = '<div class="empty-msg">🐑 لا توجد أغنام بعد... أضف أول رأس!</div>';
+            updateStats();
+            return;
+        }
+
+        container.innerHTML = '';
+        animals.forEach((animal, index) => {
+            const card = document.createElement('div');
+            card.className = 'animal-card';
+            card.innerHTML = `
+                <div class="animal-info">
+                    <h3>${escapeHtml(animal.name)}</h3>
+                    <p>${animal.breed} • ${animal.weight} كجم</p>
+                </div>
+                <button class="delete-btn" data-index="${index}">🗑️ حذف</button>
+            `;
+            container.appendChild(card);
+        });
+
+        // إضافة حدث الحذف لكل زر
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const idx = parseInt(this.getAttribute('data-index'));
+                animals.splice(idx, 1);
+                localStorage.setItem('qatiei_animals', JSON.stringify(animals));
+                renderAnimals();
+            });
+        });
+
+        updateStats();
+    }
+
+    // حماية من حقن HTML ضار
+    function escapeHtml(text) {
+        if(!text) return '';
+        return text.replace(/[&<>]/g, function(m) {
+            if(m === '&') return '&amp;';
+            if(m === '<') return '&lt;';
+            if(m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    // حفظ البيانات الجديدة
+    document.getElementById('saveBtn').addEventListener('click', function() {
+        const name = document.getElementById('animalName').value.trim();
+        const breed = document.getElementById('breed').value;
+        const weight = document.getElementById('weight').value;
+
+        if(!name) {
+            alert('❌ الرجاء إدخال رقم التعريف أو الاسم');
+            return;
+        }
+        if(!weight || isNaN(weight) || weight <= 0) {
+            alert('❌ الرجاء إدخال وزن صحيح');
+            return;
+        }
+
+        animals.push({
+            name: name,
+            breed: breed,
+            weight: weight
+        });
+
+        localStorage.setItem('qatiei_animals', JSON.stringify(animals));
+        
+        // تفريغ الحقول
+        document.getElementById('animalName').value = '';
+        document.getElementById('weight').value = '';
+        
+        renderAnimals();
+        alert('✅ تمت إضافة الرأس بنجاح!');
+    });
+
+    // عرض البيانات عند تحميل الصفحة
+    renderAnimals();
+</script>
+
+</body>
+</html>
